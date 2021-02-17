@@ -27,7 +27,7 @@ function App() {
             label="Usuário"
             type="text"
             onChange={(value) => {
-              if (value.length > 1) {
+              if (value.target.value.length > 1) {
                 setError({
                   show: false,
                   message: "",
@@ -61,12 +61,7 @@ function App() {
                     message: "Informe um usuário",
                   });
                 }
-                if (text.length > 1) {
-                  setError({
-                    show: false,
-                    message: "",
-                  });
-                }
+
                 console.log("Enviar");
               }}
               variant="contained"
