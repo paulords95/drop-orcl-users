@@ -16,20 +16,20 @@ const dbConnectSelect = async (req, res, query, ...parameters) => {
     console.log("Conectado a base");
     result = await connection.execute(query, [...parameters]);
   } catch (err) {
-    return res.send(err.message);
+    return err.message;
   } finally {
     if (connection) {
       try {
         await connection.close();
         console.log("Conexão fechada");
+        if (result.rows.length == 0) {
+          return "query não retornou nada";
+        } else {
+          return result;
+        }
       } catch (err) {
         console.error(err.message);
       }
-    }
-    if (result.rows.length == 0) {
-      return res.send("query não retornou nada");
-    } else {
-      return result;
     }
   }
 };
