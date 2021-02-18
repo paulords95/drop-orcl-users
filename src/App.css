@@ -16,25 +16,39 @@
   font-family: "Montserrat";
   font-weight: 700;
   text-align: center;
+  margin-bottom: 10vh;
 }
 
 .text-wrap {
+  display: flex;
+  flex-direction: column;
   justify-content: center;
+  justify-items: center;
   background-color: #464242;
   max-width: max-content;
   margin: 0 auto;
-  margin-top: 10vh;
-  padding: 60px;
-  border-radius: 5px;
+  margin-top: 2vh;
+  padding: 100px;
+  border-radius: 3px;
 }
 
 .input {
   border-radius: 15px;
+  margin: 0 auto;
 }
 
 .btn {
   max-width: max-content;
   justify-self: center;
   margin: 0 auto;
-  margin-top: 7vh;
+  margin-top: 5vh;
+}
+
+.alert {
+  margin-top: 15vh;
+  margin: 0 auto;
+  opacity: 0;
+  height: 0;
+  max-width: max-content;
+  transition: all 1.8s;
 }
