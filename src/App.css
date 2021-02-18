@@ -20,16 +20,12 @@
 }
 
 .text-wrap {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  justify-items: center;
   background-color: #464242;
-  max-width: max-content;
   margin: 0 auto;
   margin-top: 2vh;
   padding: 100px;
   border-radius: 3px;
+  max-width: max-content;
 }
 
 .input {

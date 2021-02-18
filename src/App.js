@@ -42,53 +42,63 @@ function App() {
           <ShowAlert condition={alertCondition} />
         </div>
         <div className="text-wrap">
-          <TextField
-            id="outlined-number"
-            className="input"
-            aria-label="primary"
-            error={error.show}
-            helperText={error.message}
-            label="Usuário"
-            type="text"
-            onChange={(value) => {
-              if (value.target.value.length > 1) {
-                setError({
-                  show: false,
-                  message: "",
-                });
-              }
-              setText(value.target.value);
+          <div
+            style={{
+              justifyContent: "center",
+              width: "max-content",
+              margin: "0 auto",
             }}
-            InputLabelProps={{
-              shrink: true,
-              style: {
-                color: "white",
-                borderRadius: 15,
-              },
-            }}
-            InputProps={{
-              style: {
-                color: "white",
-                textAlign: "center",
-                justifySelf: "center",
-                width: "250px",
-              },
-            }}
-            variant="outlined"
-            color="primary"
-          />
+          >
+            <TextField
+              id="outlined-number"
+              className="input"
+              aria-label="primary"
+              error={error.show}
+              helperText={error.message}
+              label="Usuário"
+              type="text"
+              onChange={(value) => {
+                if (value.target.value.length > 1) {
+                  setError({
+                    show: false,
+                    message: "",
+                  });
+                }
+                setText(value.target.value);
+              }}
+              InputLabelProps={{
+                shrink: true,
+                style: {
+                  color: "white",
+                  borderRadius: 15,
+                },
+              }}
+              InputProps={{
+                style: {
+                  color: "white",
+                  textAlign: "center",
+                  justifySelf: "center",
+                  width: "250px",
+                  margin: "0 auto",
+                },
+              }}
+              variant="outlined"
+              color="primary"
+            />
+          </div>
 
           <form className="btn" method="POST">
             <Button
               onClick={(e) => {
                 e.preventDefault();
-                document.querySelector(".alert").style.opacity = 1;
-                document.querySelector(".alert").style.height = "100%";
+                const elmAlrt = document.querySelector(".alert").style;
+                elmAlrt.opacity = 1;
+                elmAlrt.height = "100%";
                 setAlertCondition("dropped");
                 if (text.length < 1) {
                   setAlertCondition("");
-                  document.querySelector(".alert").style.opacity = 0;
-                  document.querySelector(".alert").style.height = 0;
+                  elmAlrt.opacity = 0;
+                  elmAlrt.height = 0;
                   setError({
                     show: true,
                     message: "Informe um usuário",
