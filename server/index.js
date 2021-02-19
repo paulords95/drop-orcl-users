@@ -40,8 +40,17 @@ app.get("/connected/sec/:user", async (req, res) => {
         APPKND: response.rows[0][8],
       };
 
-      const numsecResponse = await selectr911Mod(req, res, result.numsec);
-      console.log(numsecResponse);
+      const numsecResponse = await selectr911Mod(
+        req,
+        res,
+        response.rows[0][0].toString()
+      );
+      if (numsecResponse.rows[0].length > 0) {
+        console.log(numsecResponse.rows[0]);
+      } else {
+        console.log("Não existe na tabela r911mod");
+      }
+
       res.send(result);
     }
   } catch (error) {
@@ -51,7 +60,7 @@ app.get("/connected/sec/:user", async (req, res) => {
 
 app.get("/connected/mod", async (req, res) => {
   try {
-    const response = await selectr911Mod(req, res);
+    const response = await selectr911Mod(req, res, "10262994");
     if (response.statusCode == 304) {
       res.send(0);
     } else {
