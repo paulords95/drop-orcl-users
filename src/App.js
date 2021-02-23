@@ -5,6 +5,8 @@ import Alert from "@material-ui/lab/Alert";
 
 import Button from "@material-ui/core/Button";
 
+import api from "./services/api.js";
+
 function App() {
   const [text, setText] = useState("");
   const [alertCondition, setAlertCondition] = useState("");
@@ -105,7 +107,7 @@ function App() {
                   });
                 }
 
-                console.log("Enviar");
+                console.log(text);
               }}
               variant="contained"
               color="primary"
