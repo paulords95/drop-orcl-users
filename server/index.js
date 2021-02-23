@@ -8,7 +8,7 @@ const { dbConnectSelect, dbConnectInsert } = require("./db-connect");
 app.use(cors());
 
 const selectr911Sec = async (req, res, user) => {
-  const selectUsers = `select * from r911sec where usrnam = :usr`;
+  const selectUsers = `select * from r911sec where appusr = :usr`;
 
   const result = await dbConnectSelect(req, res, selectUsers, user);
   return result;
@@ -95,6 +95,7 @@ app.delete("/connected/sec/:user", async (req, res) => {
     console.log(error);
     responseToBeSent.push({
       msg: "erro não identificado",
+      status: false,
     });
   }
   res.send(responseToBeSent);

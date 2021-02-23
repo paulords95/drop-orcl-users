@@ -16,14 +16,14 @@ function App() {
   });
 
   const ShowAlert = (props) => {
-    if (props.condition === "not found") {
+    if (props.condition === false) {
       return (
         <Alert variant="filled" severity="error">
           Usuário não encontrado ou não conectado no sistema
         </Alert>
       );
     }
-    if (props.condition === "dropped") {
+    if (props.condition === true) {
       return (
         <Alert variant="filled" severity="success">
           Usuário desbloqueado no sistema
@@ -109,12 +109,11 @@ function App() {
                 api
                   .delete(`/connected/sec/${text.toString()}`)
                   .then((res) => {
-                    console.log(res);
+                    setAlertCondition(res.data[0].status);
                   })
                   .catch((e) => {
                     console.log(e);
                   });
-                console.log(text);
               }}
               variant="contained"
               color="primary"
