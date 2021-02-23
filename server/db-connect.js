@@ -46,10 +46,10 @@ const dbConnectInsert = async (req, res, query, ...parameters) => {
     result = await connection.execute(query, [...parameters], {
       autoCommit: true,
     });
-    return res.send("Registro Gravado");
+    return result;
   } catch (err) {
     console.log(err);
-    return res.send(err.message);
+    return err.message;
   } finally {
     if (connection) {
       try {

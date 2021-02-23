@@ -1,8 +1,11 @@
 const express = require("express");
 const app = express();
+const cors = require("cors");
 const port = 5000;
 
 const { dbConnectSelect, dbConnectInsert } = require("./db-connect");
+
+app.use(cors());
 
 const selectr911Sec = async (req, res, user) => {
   const selectUsers = `select * from r911sec where usrnam = :usr`;
@@ -17,17 +20,34 @@ const selectr911Mod = async (req, res, numsec) => {
   return result;
 };
 
-app.get("/connected/sec/:user", async (req, res) => {
+const deleteFromr911mod = async (req, res, numsec) => {
+  const deleteRow = `delete r911Mod where numsec = :numsec`;
+  const result = await dbConnectInsert(req, res, deleteRow, numsec);
+  console.log(result);
+  return result;
+};
+
+const deleteFromr911sec = async (req, res, numsec) => {
+  const deleteRow = `delete r911sec where numsec = :numsec`;
+  const result = await dbConnectInsert(req, res, deleteRow, numsec);
+
+  return result;
+};
+
+app.delete("/connected/sec/:user", async (req, res) => {
   const params = {
     usr: req.params.user.toString(),
   };
-
+  let responseToBeSent = [];
   try {
     const response = await selectr911Sec(req, res, params.usr);
     if (response.statusCode == 304) {
       res.send("1");
     } else if (response == "query não retornou nada") {
-      res.send("Usuário não encontrado");
+      responseToBeSent.push({
+        msg: "usuário não encontrado ou já derrubado",
+        status: false,
+      });
     } else {
       const result = {
         NUMSEC: response.rows[0][0],
@@ -41,16 +61,43 @@ app.get("/connected/sec/:user", async (req, res) => {
         APPKND: response.rows[0][8],
       };
       const numsec = await selectr911Mod(req, res, response.rows[0][0]);
-      if (numsec.rows.length > 0) {
-        console.log(numsec.rows);
+      if (numsec.rows) {
+        const resultOfDelete = await deleteFromr911mod(
+          req,
+          res,
+          response.rows[0][0]
+        );
+
+        setTimeout(async () => {
+          const resultOfDelete = await deleteFromr911sec(
+            req,
+            res,
+            response.rows[0][0]
+          );
+        }, 1000);
+        responseToBeSent.push({
+          msg: "usuário desconectado",
+          status: true,
+        });
       } else {
-        console.log(numsec);
+        const resultOfDelete = await deleteFromr911sec(
+          req,
+          res,
+          response.rows[0][0]
+        );
+        responseToBeSent.push({
+          msg: "usuário desconectado",
+          status: true,
+        });
       }
-      res.send(result);
     }
   } catch (error) {
     console.log(error);
+    responseToBeSent.push({
+      msg: "erro não identificado",
+    });
   }
+  res.send(responseToBeSent);
 });
 
 app.get("/connected/mod", async (req, res) => {

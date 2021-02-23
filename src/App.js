@@ -106,7 +106,14 @@ function App() {
                     message: "Informe um usuário",
                   });
                 }
-
+                api
+                  .delete(`/connected/sec/${text.toString()}`)
+                  .then((res) => {
+                    console.log(res);
+                  })
+                  .catch((e) => {
+                    console.log(e);
+                  });
                 console.log(text);
               }}
               variant="contained"
