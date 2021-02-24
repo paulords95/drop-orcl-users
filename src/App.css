@@ -26,6 +26,7 @@
   padding: 100px;
   border-radius: 3px;
   max-width: max-content;
+  height: "40%";
 }
 
 .input {
@@ -44,7 +45,7 @@
   margin-top: 15vh;
   margin: 0 auto;
   opacity: 0;
-  height: 0;
+  height: 50px;
   max-width: max-content;
   transition: all 1.8s;
 }

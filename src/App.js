@@ -37,9 +37,7 @@ function App() {
   return (
     <div className="wrap">
       <div className="container">
-        <h1 className="title">
-          Liberar conexão bloqueada no banco de dados do sistema
-        </h1>
+        <h1 className="title">Desbloquear conexão</h1>
         <div className="alert">
           <ShowAlert condition={alertCondition} />
         </div>
@@ -95,12 +93,10 @@ function App() {
                 e.preventDefault();
                 const elmAlrt = document.querySelector(".alert").style;
                 elmAlrt.opacity = 1;
-                elmAlrt.height = "100%";
                 setAlertCondition("dropped");
                 if (text.length < 1) {
                   setAlertCondition("");
                   elmAlrt.opacity = 0;
-                  elmAlrt.height = 0;
                   setError({
                     show: true,
                     message: "Informe um usuário",
