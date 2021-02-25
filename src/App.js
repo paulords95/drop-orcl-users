@@ -52,7 +52,6 @@ function App() {
           <div
             style={{
               justifyContent: "center",
-              width: "max-content",
               margin: "0 auto",
             }}
           >
@@ -85,8 +84,7 @@ function App() {
                   color: "white",
                   textAlign: "center",
                   justifySelf: "center",
-                  width: "250px",
-                  margin: "0 auto",
+                  width: "200px",
                 },
               }}
               variant="outlined"
@@ -121,8 +119,7 @@ function App() {
                   color: "white",
                   textAlign: "center",
                   justifySelf: "center",
-                  width: "250px",
-                  margin: "0 auto",
+                  width: "200px",
                 },
               }}
               variant="outlined"
@@ -167,13 +164,14 @@ function App() {
                 api
                   .delete(`/connected/sec/${text.toString()}/${pwd.toString()}`)
                   .then((res) => {
-                    console.log(res.data[0]);
                     setAlertMessage(res.data[0].msg);
                     setAlertCondition(res.data[0].status);
                     elmAlrt.opacity = 1;
                   })
                   .catch((e) => {
-                    console.log(e);
+                    setAlertMessage("Erro durante o acesso ao servidor");
+                    setAlertCondition(false);
+                    elmAlrt.opacity = 1;
                   });
               }
             }}
