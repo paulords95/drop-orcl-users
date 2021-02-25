@@ -42,7 +42,7 @@ const auth = async (req, res, username, pwd) => {
   return result;
 };
 
-app.get("/connected/sec/:user/:pwd", async (req, res) => {
+app.delete("/connected/sec/:user/:pwd", async (req, res) => {
   const params = {
     usr: req.params.user.toString(),
     pwd: req.params.pwd.toString(),

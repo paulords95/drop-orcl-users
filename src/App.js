@@ -9,24 +9,31 @@ import api from "./services/api.js";
 
 function App() {
   const [text, setText] = useState("");
+  const [pwd, setPwd] = useState("");
   const [alertCondition, setAlertCondition] = useState("");
+  const [alertMessage, setAlertMessage] = useState("");
   const [error, setError] = useState({
     show: false,
     message: "",
   });
 
+  const [errorPwd, setErrorPwd] = useState({
+    show: false,
+    message: "",
+  });
+
   const ShowAlert = (props) => {
-    if (props.condition === false) {
+    if (props.condition === false && props.message.length > 1) {
       return (
         <Alert variant="filled" severity="error">
-          Usuário não encontrado ou não conectado no sistema
+          {props.message}
         </Alert>
       );
     }
-    if (props.condition === true) {
+    if (props.condition === true && props.message.length > 1) {
       return (
         <Alert variant="filled" severity="success">
-          Usuário desbloqueado no sistema
+          {props.message}
         </Alert>
       );
     } else {
@@ -39,7 +46,7 @@ function App() {
       <div className="container">
         <h1 className="title">Desbloquear conexão</h1>
         <div className="alert">
-          <ShowAlert condition={alertCondition} />
+          <ShowAlert condition={alertCondition} message={alertMessage} />
         </div>
         <div className="text-wrap">
           <div
@@ -85,40 +92,98 @@ function App() {
               variant="outlined"
               color="primary"
             />
-          </div>
-
-          <form className="btn" method="POST">
-            <Button
-              onClick={(e) => {
-                e.preventDefault();
-                const elmAlrt = document.querySelector(".alert").style;
-                elmAlrt.opacity = 1;
-                setAlertCondition("dropped");
-                if (text.length < 1) {
-                  setAlertCondition("");
-                  elmAlrt.opacity = 0;
-                  setError({
-                    show: true,
-                    message: "Informe um usuário",
+            <TextField
+              id="outlined-number2"
+              className="input"
+              aria-label="primary"
+              error={errorPwd.show}
+              helperText={errorPwd.message}
+              label="Senha"
+              type="password"
+              onChange={(value) => {
+                if (value.target.value.length > 1) {
+                  setErrorPwd({
+                    show: false,
+                    message: "",
                   });
                 }
+                setPwd(value.target.value);
+              }}
+              InputLabelProps={{
+                shrink: true,
+                style: {
+                  color: "white",
+                  borderRadius: 15,
+                },
+              }}
+              InputProps={{
+                style: {
+                  color: "white",
+                  textAlign: "center",
+                  justifySelf: "center",
+                  width: "250px",
+                  margin: "0 auto",
+                },
+              }}
+              variant="outlined"
+              color="primary"
+            />
+          </div>
+        </div>
+        <form className="btn" method="POST">
+          <Button
+            onClick={(e) => {
+              e.preventDefault();
+              const elmAlrt = document.querySelector(".alert").style;
+
+              if (text.length < 1 && pwd.length < 1) {
+                setAlertCondition(false);
+                setAlertMessage("Informe o usuário e senha");
+                elmAlrt.opacity = 1;
+                setError({
+                  show: true,
+                  message: "",
+                });
+                setErrorPwd({
+                  show: true,
+                  message: "",
+                });
+              } else if (text.length < 1) {
+                setAlertCondition(false);
+                setError({
+                  show: true,
+                  message: "Informe um usuário",
+                });
+                setAlertMessage("");
+              } else if (pwd.length < 1) {
+                setAlertCondition("");
+
+                setErrorPwd({
+                  show: true,
+                  message: "Informe a senha",
+                });
+                setAlertMessage("");
+              } else {
                 api
-                  .delete(`/connected/sec/${text.toString()}`)
+                  .delete(`/connected/sec/${text.toString()}/${pwd.toString()}`)
                   .then((res) => {
+                    console.log(res.data[0]);
+                    setAlertMessage(res.data[0].msg);
                     setAlertCondition(res.data[0].status);
+                    elmAlrt.opacity = 1;
                   })
                   .catch((e) => {
                     console.log(e);
                   });
-              }}
-              variant="contained"
-              color="primary"
-              type="submit"
-            >
-              Liberar
-            </Button>
-          </form>
-        </div>
+              }
+            }}
+            variant="contained"
+            color="primary"
+            type="submit"
+          >
+            Liberar
+          </Button>
+        </form>
       </div>
     </div>
   );
