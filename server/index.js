@@ -85,7 +85,7 @@ app.delete("/connected/sec/:user/:pwd", async (req, res) => {
           }
         } else {
           responseToBeSent.push({
-            msg: "Usuário não conectado no sistema",
+            msg: "Usuário não está bloqueado no sistema",
             status: false,
           });
         }
