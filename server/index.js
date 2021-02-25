@@ -34,84 +34,75 @@ const deleteFromr911sec = async (req, res, numsec) => {
   return result;
 };
 
-app.delete("/connected/sec/:user", async (req, res) => {
+const auth = async (req, res, username, pwd) => {
+  const selectColumns =
+    "select nomusu, usu_sencol from e099usu where nomusu = :nomusu AND usu_sencol = :pwd AND usu_sencol is not null";
+  const result = await dbConnectSelect(req, res, selectColumns, username, pwd);
+
+  return result;
+};
+
+app.get("/connected/sec/:user/:pwd", async (req, res) => {
   const params = {
     usr: req.params.user.toString(),
+    pwd: req.params.pwd.toString(),
   };
   let responseToBeSent = [];
   try {
-    const response = await selectr911Sec(req, res, params.usr);
-    if (response.statusCode == 304) {
-      res.send("1");
-    } else if (response == "query não retornou nada") {
+    const data = await auth(req, res, params.usr, params.pwd);
+    if (data.rows) {
+      try {
+        const response = await selectr911Sec(req, res, params.usr);
+        if (response.rows) {
+          const result = {
+            NUMSEC: response.rows[0][0],
+            DATTIM: response.rows[0][1],
+            COMNAM: response.rows[0][2],
+            USRNAM: response.rows[0][3],
+            APPNAM: response.rows[0][4],
+            APPUSR: response.rows[0][5],
+            IDINST: response.rows[0][6],
+            ADMMSG: response.rows[0][7],
+            APPKND: response.rows[0][8],
+          };
+          const numsec = await selectr911Mod(req, res, response.rows[0][0]);
+          if (numsec.rows) {
+            await deleteFromr911mod(req, res, response.rows[0][0]);
+
+            setTimeout(async () => {
+              await deleteFromr911sec(req, res, response.rows[0][0]);
+            }, 1000);
+            responseToBeSent.push({
+              msg: "usuário desconectado",
+              status: true,
+            });
+          } else {
+            await deleteFromr911sec(req, res, response.rows[0][0]);
+            responseToBeSent.push({
+              msg: "usuário desconectado",
+              status: true,
+            });
+          }
+        } else {
+          responseToBeSent.push({
+            msg: "usuário não conectado no sistema",
+            status: false,
+          });
+        }
+      } catch (error) {}
+    } else {
       responseToBeSent.push({
-        msg: "usuário não encontrado ou já derrubado",
+        msg: "usuário ou senha incorretos",
         status: false,
       });
-    } else {
-      const result = {
-        NUMSEC: response.rows[0][0],
-        DATTIM: response.rows[0][1],
-        COMNAM: response.rows[0][2],
-        USRNAM: response.rows[0][3],
-        APPNAM: response.rows[0][4],
-        APPUSR: response.rows[0][5],
-        IDINST: response.rows[0][6],
-        ADMMSG: response.rows[0][7],
-        APPKND: response.rows[0][8],
-      };
-      const numsec = await selectr911Mod(req, res, response.rows[0][0]);
-      if (numsec.rows) {
-        const resultOfDelete = await deleteFromr911mod(
-          req,
-          res,
-          response.rows[0][0]
-        );
-
-        setTimeout(async () => {
-          const resultOfDelete = await deleteFromr911sec(
-            req,
-            res,
-            response.rows[0][0]
-          );
-        }, 1000);
-        responseToBeSent.push({
-          msg: "usuário desconectado",
-          status: true,
-        });
-      } else {
-        const resultOfDelete = await deleteFromr911sec(
-          req,
-          res,
-          response.rows[0][0]
-        );
-        responseToBeSent.push({
-          msg: "usuário desconectado",
-          status: true,
-        });
-      }
     }
   } catch (error) {
-    console.log(error);
     responseToBeSent.push({
       msg: "erro não identificado",
       status: false,
     });
   }
   res.send(responseToBeSent);
-});
-
-app.get("/connected/mod", async (req, res) => {
-  try {
-    const response = await selectr911Mod(req, res, "10262994");
-    if (response.statusCode == 304) {
-      res.send(0);
-    } else {
-      res.send(response);
-    }
-  } catch (error) {
-    console.log(error.message);
-  }
 });
 
 app.listen(port, "0.0.0.0", () =>
