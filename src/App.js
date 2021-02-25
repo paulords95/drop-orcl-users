@@ -138,7 +138,7 @@ function App() {
 
               if (text.length < 1 && pwd.length < 1) {
                 setAlertCondition(false);
-                setAlertMessage("Informe o usuário e senha");
+                setAlertMessage("Preencha seu usuário e senha");
                 elmAlrt.opacity = 1;
                 setError({
                   show: true,
@@ -152,7 +152,7 @@ function App() {
                 setAlertCondition(false);
                 setError({
                   show: true,
-                  message: "Informe um usuário",
+                  message: "Preencha seu usuário",
                 });
                 setAlertMessage("");
               } else if (pwd.length < 1) {
@@ -160,7 +160,7 @@ function App() {
 
                 setErrorPwd({
                   show: true,
-                  message: "Informe a senha",
+                  message: "Preencha sua senha",
                 });
                 setAlertMessage("");
               } else {

@@ -73,32 +73,32 @@ app.delete("/connected/sec/:user/:pwd", async (req, res) => {
               await deleteFromr911sec(req, res, response.rows[0][0]);
             }, 1000);
             responseToBeSent.push({
-              msg: "usuário desconectado",
+              msg: "Usuário desconectado",
               status: true,
             });
           } else {
             await deleteFromr911sec(req, res, response.rows[0][0]);
             responseToBeSent.push({
-              msg: "usuário desconectado",
+              msg: "Usuário desconectado",
               status: true,
             });
           }
         } else {
           responseToBeSent.push({
-            msg: "usuário não conectado no sistema",
+            msg: "Usuário não conectado no sistema",
             status: false,
           });
         }
       } catch (error) {}
     } else {
       responseToBeSent.push({
-        msg: "usuário ou senha incorretos",
+        msg: "Usuário ou senha estão incorretos",
         status: false,
       });
     }
   } catch (error) {
     responseToBeSent.push({
-      msg: "erro não identificado",
+      msg: "Erro não identificado",
       status: false,
     });
   }
