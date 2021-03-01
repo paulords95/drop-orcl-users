@@ -25,7 +25,7 @@ function App() {
   const ShowAlert = (props) => {
     if (
       props.condition === false &&
-      props.message == "Usuário não está bloqueado no sistema"
+      props.message === "Usuário não está bloqueado no sistema"
     ) {
       return (
         <Alert variant="filled" severity="warning">
@@ -52,8 +52,6 @@ function App() {
   return (
     <div className="wrap">
       <div className="container">
-        <h1 className="title">Desbloquear conexão</h1>
-
         <div className="text-wrap">
           <div
             style={{
@@ -61,6 +59,7 @@ function App() {
               margin: "0 auto",
             }}
           >
+            <h1 className="title">Desbloquear conexão</h1>
             <div className="alert">
               <ShowAlert condition={alertCondition} message={alertMessage} />
             </div>
