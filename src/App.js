@@ -52,7 +52,6 @@ function App() {
 
   return (
     <div className="wrap">
-      <div id="electron-titlebar" class="drag"></div>
       <div className="container">
         <div className="text-wrap">
           <div
