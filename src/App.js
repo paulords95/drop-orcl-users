@@ -6,6 +6,7 @@ import Alert from "@material-ui/lab/Alert";
 import Button from "@material-ui/core/Button";
 
 import api from "./services/api.js";
+import lockIcon from "./lock-svg.svg";
 
 function App() {
   const [text, setText] = useState("");
@@ -51,6 +52,7 @@ function App() {
 
   return (
     <div className="wrap">
+      <div id="electron-titlebar" class="drag"></div>
       <div className="container">
         <div className="text-wrap">
           <div
@@ -59,6 +61,7 @@ function App() {
               margin: "0 auto",
             }}
           >
+            <img src={lockIcon} alt="lock" className="lock-icon" />
             <h1 className="title">Desbloquear conexão</h1>
             <div className="alert">
               <ShowAlert condition={alertCondition} message={alertMessage} />
@@ -84,13 +87,13 @@ function App() {
                 InputLabelProps={{
                   shrink: true,
                   style: {
-                    color: "white",
+                    color: "#35363B",
                     borderRadius: 15,
                   },
                 }}
                 InputProps={{
                   style: {
-                    color: "white",
+                    color: "#35363B",
                     textAlign: "center",
                     justifySelf: "center",
                     width: "200px",
@@ -121,14 +124,14 @@ function App() {
                 InputLabelProps={{
                   shrink: true,
                   style: {
-                    color: "white",
+                    color: "#35363B",
                     borderRadius: 15,
                     textAlign: "center",
                   },
                 }}
                 InputProps={{
                   style: {
-                    color: "white",
+                    color: "#35363B",
                     textAlign: "center",
                     justifySelf: "center",
                     width: "200px",
@@ -138,7 +141,7 @@ function App() {
                 color="primary"
               />
             </div>
-            <form className="btn" method="POST">
+            <form className="btn" method="DELETE">
               <Button
                 onClick={(e) => {
                   e.preventDefault();
