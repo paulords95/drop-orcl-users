@@ -1,9 +1,10 @@
 const oracledb = require("oracledb");
 require("dotenv").config();
+const { USER, PASSWORD, CONNECTIONSTRING } = require("./password");
 
-const user = process.env.USER;
-const password = process.env.PASSWORD;
-const connectString = process.env.CONNECTIONSTRING;
+const user = USER;
+const password = PASSWORD;
+const connectString = CONNECTIONSTRING;
 
 const dbConnectSelect = async (req, res, query, ...parameters) => {
   try {

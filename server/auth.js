@@ -1,10 +1,12 @@
 require("dotenv").config();
 const soap = require("soap");
 
+const { SOAP_ENDPOINT } = require("./password");
+
 module.exports = async (req, res, next) => {
   const { user, pwd } = req.params;
   try {
-    soap.createClient(process.env.SOAP_ENDPOINT, function (err, client) {
+    soap.createClient(SOAP_ENDPOINT, function (err, client) {
       if (client) {
         let response = "";
         client.GetUser(
