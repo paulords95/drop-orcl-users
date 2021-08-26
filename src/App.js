@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "./App.css";
 import TextField from "@material-ui/core/TextField";
 import Alert from "@material-ui/lab/Alert";
-import CircularProgress from '@material-ui/core/CircularProgress';
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 import Button from "@material-ui/core/Button";
 
@@ -11,7 +11,7 @@ import lockIcon from "./lock-svg.svg";
 
 function App() {
   const [text, setText] = useState("");
-  const [load, setLoad] = useState(false)
+  const [load, setLoad] = useState(false);
   const [pwd, setPwd] = useState("");
   const [alertCondition, setAlertCondition] = useState("");
   const [alertMessage, setAlertMessage] = useState("");
@@ -47,8 +47,7 @@ function App() {
           {props.message}
         </Alert>
       );
-    } 
-    else {
+    } else {
       return <></>;
     }
   };
@@ -65,12 +64,17 @@ function App() {
           >
             <img src={lockIcon} alt="lock" className="lock-icon" />
             <h1 className="title">Desbloquear conexão</h1>
-            <div style={{ height: 0 }} >{load ? <CircularProgress /> : <></>}</div>
-            <div className="alert">
-              {load ? <></> : <ShowAlert condition={alertCondition} message={alertMessage} />}
-           
+            <div style={{ height: 0 }}>
+              {load ? <CircularProgress /> : <></>}
             </div>
-            
+            <div className="alert">
+              {load ? (
+                <></>
+              ) : (
+                <ShowAlert condition={alertCondition} message={alertMessage} />
+              )}
+            </div>
+
             <div className="inputItem">
               <TextField
                 id="outlined-number"
@@ -81,7 +85,7 @@ function App() {
                 label="Usuário"
                 type="text"
                 onChange={(value) => {
-                  setAlertCondition('');
+                  setAlertCondition("");
                   setAlertMessage("");
                   if (value.target.value.length > 1) {
                     setError({
@@ -120,7 +124,7 @@ function App() {
                 label="Senha"
                 type="password"
                 onChange={(value) => {
-                  setAlertCondition('');
+                  setAlertCondition("");
                   setAlertMessage("");
                   if (value.target.value.length > 1) {
                     setErrorPwd({
@@ -154,7 +158,7 @@ function App() {
               <Button
                 onClick={(e) => {
                   e.preventDefault();
-                
+
                   const elmAlrt = document.querySelector(".alert").style;
                   if (text.length < 1 && pwd.length < 1) {
                     setAlertCondition(false);
@@ -184,7 +188,7 @@ function App() {
                     });
                     setAlertMessage("");
                   } else {
-                    setLoad(true)
+                    setLoad(true);
                     api
                       .delete(
                         `/connected/sec/${text.toString()}/${pwd.toString()}`
@@ -192,13 +196,14 @@ function App() {
                       .then((res) => {
                         setAlertMessage(res.data[0].msg);
                         setAlertCondition(res.data[0].status);
-                        setLoad(false)
+                        setLoad(false);
                         elmAlrt.opacity = 1;
                       })
                       .catch((e) => {
+                        console.log(e);
                         setAlertMessage("Erro durante o acesso ao servidor");
                         setAlertCondition(false);
-                        setLoad(false)
+                        setLoad(false);
                         elmAlrt.opacity = 1;
                       });
                   }

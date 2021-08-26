@@ -12,7 +12,7 @@ function createWindow() {
     },
   });
   win.removeMenu();
-  win.loadURL("http://localhost:30001/");
+  win.loadURL("http://qcolaps02.quimtia.net.br:9001/");
 }
 
 app.whenReady().then(createWindow);
