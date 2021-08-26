@@ -194,6 +194,7 @@ function App() {
                         `/connected/sec/${text.toString()}/${pwd.toString()}`
                       )
                       .then((res) => {
+                        console.log(res);
                         setAlertMessage(res.data[0].msg);
                         setAlertCondition(res.data[0].status);
                         setLoad(false);

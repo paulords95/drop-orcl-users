@@ -5,32 +5,32 @@ const port = 5000;
 
 const auth = require("./auth");
 
-const { dbConnectSelect, dbConnectInsert } = require("./db-connect");
+const { db } = require("./db-connect");
 
 app.use(cors());
 
 const selectr911Sec = async (req, res, user) => {
   const selectUsers = `select * from r911sec where appusr = :usr`;
 
-  const result = await dbConnectSelect(req, res, selectUsers, user);
+  const result = await db(selectUsers, user);
   return result;
 };
 
 const selectr911Mod = async (req, res, numsec) => {
   const selectUsers = `select * from r911Mod where numsec = :numsec`;
-  const result = await dbConnectSelect(req, res, selectUsers, numsec);
+  const result = await db(selectUsers, numsec);
   return result;
 };
 
 const deleteFromr911mod = async (req, res, numsec) => {
   const deleteRow = `delete r911Mod where numsec = :numsec`;
-  const result = await dbConnectInsert(req, res, deleteRow, numsec);
+  const result = await db(deleteRow, numsec);
   return result;
 };
 
 const deleteFromr911sec = async (req, res, numsec) => {
   const deleteRow = `delete r911sec where numsec = :numsec`;
-  const result = await dbConnectInsert(req, res, deleteRow, numsec);
+  const result = await db(deleteRow, numsec);
 
   return result;
 };
@@ -46,40 +46,42 @@ app.delete("/connected/sec/:user/:pwd", auth, async (req, res) => {
     try {
       const response = await selectr911Sec(req, res, params.usr);
       if (response.rows) {
-        const result = {
-          NUMSEC: response.rows[0][0],
-          DATTIM: response.rows[0][1],
-          COMNAM: response.rows[0][2],
-          USRNAM: response.rows[0][3],
-          APPNAM: response.rows[0][4],
-          APPUSR: response.rows[0][5],
-          IDINST: response.rows[0][6],
-          ADMMSG: response.rows[0][7],
-          APPKND: response.rows[0][8],
-        };
-        const numsec = await selectr911Mod(req, res, response.rows[0][0]);
-        if (numsec.rows) {
-          await deleteFromr911mod(req, res, response.rows[0][0]);
+        if (response.rows.length > 0) {
+          const result = {
+            NUMSEC: response.rows[0][0],
+            DATTIM: response.rows[0][1],
+            COMNAM: response.rows[0][2],
+            USRNAM: response.rows[0][3],
+            APPNAM: response.rows[0][4],
+            APPUSR: response.rows[0][5],
+            IDINST: response.rows[0][6],
+            ADMMSG: response.rows[0][7],
+            APPKND: response.rows[0][8],
+          };
+          const numsec = await selectr911Mod(req, res, response.rows[0][0]);
+          if (numsec.rows) {
+            await deleteFromr911mod(req, res, response.rows[0][0]);
 
-          setTimeout(async () => {
+            setTimeout(async () => {
+              await deleteFromr911sec(req, res, response.rows[0][0]);
+            }, 1000);
+            responseToBeSent.push({
+              msg: "Usuário desconectado",
+              status: true,
+            });
+          } else {
             await deleteFromr911sec(req, res, response.rows[0][0]);
-          }, 1000);
-          responseToBeSent.push({
-            msg: "Usuário desconectado",
-            status: true,
-          });
+            responseToBeSent.push({
+              msg: "Usuário desconectado",
+              status: true,
+            });
+          }
         } else {
-          await deleteFromr911sec(req, res, response.rows[0][0]);
           responseToBeSent.push({
-            msg: "Usuário desconectado",
-            status: true,
+            msg: "Usuário não está bloqueado no sistema",
+            status: false,
           });
         }
-      } else {
-        responseToBeSent.push({
-          msg: "Usuário não está bloqueado no sistema",
-          status: false,
-        });
       }
     } catch (error) {}
   } catch (error) {
